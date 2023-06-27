@@ -1,0 +1,250 @@
+#include <glut.h>
+
+float cameraX = 3.0f;
+float cameraY = 1.0f;
+float cameraZ = 6.0f;
+
+void display()
+{
+
+	glClearColor(0.0f, 0.0f, 0.6f, 0.0f); // cor do fundo
+	glClear(GL_COLOR_BUFFER_BIT);
+	glutSwapBuffers();
+
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+
+
+	gluLookAt(cameraX, cameraY, cameraZ, 0, 1, 0, 0, 1, 0);
+
+	// Fonte de Luz
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	GLfloat lightDirection[] = { 100.0f, 10.0f, 100.0f, 0.0f };
+	glLightfv(GL_LIGHT0, GL_POSITION, lightDirection);
+	
+	//CORPO- CILINDRO
+
+	glPushMatrix();
+	glRotatef(-90, 1, 0, 0); // Rotaciona o cilindro para ficar em pé
+	glColor3f(1.0, 1.0, 1.0); // Cor branca
+	GLUquadric* quadric = gluNewQuadric();
+	gluCylinder(quadric, 0.7, 1.0, 1.7, 20, 20);
+	glPopMatrix();
+
+	//CORPO - ESFERA
+	glPushMatrix();
+	glColor3f(1.0, 1.0, 1.0); // Cor Branca
+	glTranslatef(0.0f, 0.0f, 0.0f); // Move a esfera para baixo e para cima
+	glutSolidSphere(0.7, 35, 20); // tamanho
+	glPopMatrix();
+
+	glFlush();
+
+	// CABEÇA
+	glPushMatrix();
+	glColor3f(1.0, 1.0, 1.0); // Cor Branca
+	glTranslatef(0.0f, 2.5f, 0.0f); // Mover a esfera para cima
+	glutSolidSphere(0.5, 20, 20); // Esfera interna
+	glPopMatrix();
+
+	glFlush();
+
+	// PARTE PRETA DA CABEÇA
+	glColor3f(0.0, 0.0, 0.0);
+	glBegin(GL_QUADS);
+	// Face frontal
+	glVertex3f(-0.3f, 2.2f, 0.5f);
+	glVertex3f(0.3f, 2.2f, 0.5f);
+	glVertex3f(0.3f, 2.6f, 0.5f);
+	glVertex3f(-0.3f, 2.6f, 0.5f);
+
+	// Base
+	glVertex3f(-0.3f, 2.2f, 0.2f);
+	glVertex3f(0.3f, 2.2f, 0.2f);
+	glVertex3f(0.3f, 2.2f, -0.2f);
+	glVertex3f(-0.3f, 2.2f, -0.2f);
+	glEnd();
+
+
+	// Braço direito
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glPushMatrix();
+	glTranslatef(1.1, 1, 0.0); // POSIÇÃO (CONE)
+	glScalef(0.05, 0.7, 0.14); // TAMANHO
+	glutSolidCone(1.0, 2.0, 90, 50);
+	glPopMatrix();
+
+	// Braço esquerdo
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glPushMatrix();
+	glTranslatef(-1.1, 1, 0.0); //POSIÇÃO (CONE)
+	glScalef(0.05, 0.7, 0.14); // TAMANHO
+	glutSolidCone(1.0, 2.0, 90, 50);
+	glPopMatrix();
+
+
+	//CHÃO
+
+	glDisable(GL_LIGHTING);
+	glColor3f(0.0, 1.0, 1.0);
+	glBegin(GL_QUADS);
+
+	// Face frontal
+	glVertex3f(-0.3f, 2.2f, 0.5f);
+	glVertex3f(0.3f, 2.2f, 0.5f);
+	glVertex3f(0.3f, 2.6f, 0.5f);
+	glVertex3f(-0.3f, 2.6f, 0.5f);
+	// Face traseira
+	glVertex3f(-0.3f, 2.2f, -0.2f);
+	glVertex3f(0.3f, 2.2f, -0.2f);
+	glVertex3f(0.3f, 2.6f, -0.2f);
+	glVertex3f(-0.3f, 2.6f, -0.2f);
+	// Lado esquerdo
+	glVertex3f(-0.3f, 2.2f, 0.2f);
+	glVertex3f(-0.3f, 2.2f, -0.2f);
+	glVertex3f(-0.3f, 2.6f, -0.2f);
+	glVertex3f(-0.3f, 2.6f, 0.2f);
+	// Lado direito
+	glVertex3f(0.3f, 2.2f, 0.2f);
+	glVertex3f(0.3f, 2.6f, 0.2f);
+	glVertex3f(0.3f, 2.6f, -0.2f);
+	glVertex3f(0.3f, 2.2f, -0.2f);
+	// Topo
+	glVertex3f(-0.2f, 2.6f, 0.2f);
+	glVertex3f(-0.2f, 2.6f, -0.2f);
+	glVertex3f(0.3f, 2.6f, -0.2f);
+	glVertex3f(0.3f, 2.6f, 0.2f);
+	// Base
+	glVertex3f(-1.3f, -1.2f, 1.2f);
+	glVertex3f(1.3f, -1.2f, 1.2f);
+	glVertex3f(1.3f, -1.2f, -1.2f);
+	glVertex3f(-1.3f, -1.2f, -1.2f);
+	glEnd();
+
+
+
+	//olho 1 esquerdo
+	glColor3f(0.0, 0.0, 1.0);
+	glBegin(GL_QUADS);
+	// Face frontal
+	glVertex3f(-0.250f, 2.35f, 0.525f);
+	glVertex3f(-0.05f, 2.35f, 0.525f);
+	glVertex3f(-0.05f, 2.45f, 0.525f);
+	glVertex3f(-0.250f, 2.45f, 0.525f);
+	// Face traseira
+	glVertex3f(-0.3f, 2.2f, -0.2f);
+	glVertex3f(0.3f, 2.2f, -0.2f);
+	glVertex3f(0.3f, 2.6f, -0.2f);
+	glVertex3f(-0.3f, 2.6f, -0.2f);
+	// Lado esquerdo
+	glVertex3f(-0.3f, 2.2f, 0.2f);
+	glVertex3f(-0.3f, 2.2f, -0.2f);
+	glVertex3f(-0.3f, 2.6f, -0.2f);
+	glVertex3f(-0.3f, 2.6f, 0.2f);
+	// Lado direito
+	glVertex3f(0.3f, 2.2f, 0.2f);
+	glVertex3f(0.3f, 2.6f, 0.2f);
+	glVertex3f(0.3f, 2.6f, -0.2f);
+	glVertex3f(0.3f, 2.2f, -0.2f);
+	// Topo
+	glVertex3f(-0.2f, 2.6f, 0.2f);
+	glVertex3f(-0.2f, 2.6f, -0.2f);
+	glVertex3f(0.3f, 2.6f, -0.2f);
+	glVertex3f(0.3f, 2.6f, 0.2f);
+	// Base
+	glVertex3f(-0.3f, 2.2f, 0.2f);
+	glVertex3f(0.3f, 2.2f, 0.2f);
+	glVertex3f(0.3f, 2.2f, -0.2f);
+	glVertex3f(-0.3f, 2.2f, -0.2f);
+	glEnd();
+
+	//olho 2 direito
+	glColor3f(0.0, 0.0, 1.0);
+	glBegin(GL_QUADS);
+	// Face frontal
+	glVertex3f(0.05f, 2.35f, 0.525f);
+	glVertex3f(0.25f, 2.35f, 0.525f);
+	glVertex3f(0.25f, 2.45f, 0.525f);
+	glVertex3f(0.05f, 2.45f, 0.525f);
+	// Face traseira
+	glVertex3f(-0.3f, 2.2f, -0.2f);
+	glVertex3f(0.3f, 2.2f, -0.2f);
+	glVertex3f(0.3f, 2.6f, -0.2f);
+	glVertex3f(-0.3f, 2.6f, -0.2f);
+	// Lado esquerdo
+	glVertex3f(-0.3f, 2.2f, 0.2f);
+	glVertex3f(-0.3f, 2.2f, -0.2f);
+	glVertex3f(-0.3f, 2.6f, -0.2f);
+	glVertex3f(-0.3f, 2.6f, 0.2f);
+	// Lado direito
+	glVertex3f(0.3f, 2.2f, 0.2f);
+	glVertex3f(0.3f, 2.6f, 0.2f);
+	glVertex3f(0.3f, 2.6f, -0.2f);
+	glVertex3f(0.3f, 2.2f, -0.2f);
+	// Topo
+	glVertex3f(-0.2f, 2.6f, 0.2f);
+	glVertex3f(-0.2f, 2.6f, -0.2f);
+	glVertex3f(0.3f, 2.6f, -0.2f);
+	glVertex3f(0.3f, 2.6f, 0.2f);
+	// Base
+	glVertex3f(-0.3f, 2.2f, 0.2f);
+	glVertex3f(0.3f, 2.2f, 0.2f);
+	glVertex3f(0.3f, 2.2f, -0.2f);
+	glVertex3f(-0.3f, 2.2f, -0.2f);
+	glEnd();
+
+	glutSwapBuffers();
+}
+
+
+
+
+void reshape(int width, int height)
+{
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(45, (float)width / height, 1.0, 10.0);
+	glMatrixMode(GL_MODELVIEW);
+}
+
+void specialKeys(int key, int x, int y)
+{
+	float cameraSpeed = 0.1f;
+	float angleSpeed = 0.1f;
+	switch (key)
+	{
+	case GLUT_KEY_UP:
+		cameraZ -= cameraSpeed;
+		break;
+	case GLUT_KEY_DOWN:
+		cameraZ += cameraSpeed;
+		break;
+	case GLUT_KEY_LEFT:
+		cameraX -= cameraSpeed;
+		break;
+	case GLUT_KEY_RIGHT:
+		cameraX += cameraSpeed;
+		break;
+	}
+
+	glutPostRedisplay();
+}
+
+int main(int argc, char** argv)
+{
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitWindowSize(800, 600);
+	glutCreateWindow("Cilindro e Esfera 3D");
+	glEnable(GL_DEPTH_TEST);
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
+	glutSpecialFunc(specialKeys);
+	glutMainLoop();
+
+	return 0;
+}
